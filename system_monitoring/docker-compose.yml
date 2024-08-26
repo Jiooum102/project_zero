@@ -40,6 +40,21 @@ services:
       - '/:/host:ro,rslave'
     networks:
       - prometheus-network
+  nvidia-dcgm-exporter:
+    image: nvcr.io/nvidia/k8s/dcgm-exporter:3.3.7-3.5.0-ubuntu22.04
+    container_name: nvidia-dcgm-exporter
+    pid: host
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              capabilities: [ gpu ]
+    ports:
+      - "9400:9400"
+    networks:
+      - prometheus-network
+
 networks:
   prometheus-network:
     driver: bridge
