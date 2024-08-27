@@ -50,6 +50,7 @@ services:
           devices:
             - driver: nvidia
               capabilities: [ gpu ]
+    restart: unless-stopped
     ports:
       - "9400:9400"
     networks:
