@@ -11,7 +11,7 @@ jobs:
       - name: deploy all services
         run: docker compose -f system_monitoring/docker-compose.yml up -d
       - name: deploy prometheus
-        run: docker compose -f system_monitoring/docker-compose.yml restart prometheus -d
+        run: docker compose -f system_monitoring/docker-compose.yml restart prometheus
       - name: stop grafana
         run: docker compose -f system_monitoring/docker-compose.yml down grafana
       - name: deploy grafana
