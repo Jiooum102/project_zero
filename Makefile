@@ -17,3 +17,9 @@ dev_test_lint:
 	./scripts/develop.sh test_lint
 dev_fix_lint:
 	./scripts/develop.sh fix_lint
+
+deploy_grafana:
+	docker compose -f system_monitoring/docker-compose.yml up grafana -d
+
+deploy_prometheus:
+	docker compose -f system_monitoring/docker-compose.yml up prometheus -d
