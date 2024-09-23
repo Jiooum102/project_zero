@@ -55,6 +55,27 @@ services:
       - "9400:9400"
     networks:
       - prometheus-network
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: pz_cadvisor
+    ports:
+      - "8080:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    depends_on:
+      - redis
+    networks:
+      - prometheus-network
+  redis:
+    image: redis:latest
+    container_name: pz_redis
+    ports:
+      - "6379:6379"
+    networks:
+      - prometheus-network
 
 networks:
   prometheus-network:

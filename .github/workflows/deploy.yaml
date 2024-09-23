@@ -8,8 +8,10 @@ jobs:
   deploy:
     runs-on: self-hosted
     steps:
+      - name: deploy all services
+        run: docker compose -f system_monitoring/docker-compose.yml up -d
       - name: deploy prometheus
-        run: docker compose -f system_monitoring/docker-compose.yml up prometheus -d
+        run: docker compose -f system_monitoring/docker-compose.yml restart prometheus -d
       - name: stop grafana
         run: docker compose -f system_monitoring/docker-compose.yml down grafana
       - name: deploy grafana
