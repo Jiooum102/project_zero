@@ -58,6 +58,7 @@ services:
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:latest
     container_name: pz_cadvisor
+    restart: unless-stopped
     ports:
       - "8080:8080"
     volumes:
@@ -72,6 +73,7 @@ services:
   redis:
     image: redis:latest
     container_name: pz_redis
+    restart: unless-stopped
     ports:
       - "6379:6379"
     networks:
