@@ -1,0 +1,22 @@
+version: '3.8'
+
+networks:
+  services-network:
+    driver: bridge
+
+services:
+  minio:
+    image: quay.io/minio/minio
+    container_name: pz_minio
+    restart: unless-stopped
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    networks:
+      - services-network
+    environment:
+      MINIO_ROOT_USER: root
+      MINIO_ROOT_PASSWORD: 123qwe!@#
+    volumes:
+      - /mnt/storage/minio:/data
+    command: server /data --console-address ":9001"
