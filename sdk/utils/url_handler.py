@@ -1,6 +1,6 @@
 from typing import Any
 
-from utils.cloud_storage.minio_storage import MinioStorage
+from sdk.cloud_storage.minio_storage import MinioStorage
 
 
 def cloud_upload(cloud_storage: Any, local_path: str, *args, **kwargs) -> None:

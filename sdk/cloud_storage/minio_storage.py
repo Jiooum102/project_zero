@@ -2,10 +2,9 @@ import mimetypes
 import os
 import uuid
 
-from dependency_injector.providers import AbstractSingleton, Configuration
 from minio import Minio
 
-from utils.cloud_storage.base_cloud_storage import AbstractCloudStorage
+from sdk.cloud_storage.base_cloud_storage import AbstractCloudStorage
 
 
 class MinioStorage(AbstractCloudStorage):

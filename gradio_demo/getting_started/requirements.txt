@@ -1,0 +1,21 @@
+torch~=2.4.1
+torchvision
+einops
+fire >= 0.6.0
+huggingface-hub
+safetensors
+sentencepiece
+transformers~=4.44.2
+tokenizers
+protobuf
+requests
+invisible-watermark
+optimum-quanto
+git+https://github.com/huggingface/diffusers.git
+dependency-injector~=4.42.0
+minio~=7.2.9
+gradio~=4.44.1
+pydantic~=2.9.2
+wget~=3.2
+exceptiongroup~=1.2.2
+optimum~=1.22.0
