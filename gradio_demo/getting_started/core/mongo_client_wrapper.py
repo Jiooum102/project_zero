@@ -19,12 +19,13 @@ class MongoClientWrapper:
         self._database = database
         self._collection = collection
 
-    def create(self, data, *args, **kwargs):
+    def insert(self, data, *args, **kwargs):
         doc = {k.label: v for k, v in data.items()}
-        create_time = datetime.datetime.now()
-        doc.update({'create_time': create_time})
+        return self.insert_one(doc, *args, **kwargs)
 
-        result = self._mongo_client.insert_one(self._database, self._collection, doc)
+    def insert_one(self, data: dict, *args, **kwargs):
+        create_time = datetime.datetime.now()
+        data.update({'create_time': create_time})
+        result = self._mongo_client.insert_one(self._database, self._collection, data)
         inserted_id = str(result.inserted_id)
-        print(f"Created request_id: {inserted_id}!")
         return inserted_id

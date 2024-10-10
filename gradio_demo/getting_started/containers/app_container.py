@@ -1,5 +1,6 @@
 from dependency_injector import containers, providers
 
+from gradio_demo.getting_started.core.controller import AppController
 from gradio_demo.getting_started.core.flux_wrapper import FluxWrapper
 from gradio_demo.getting_started.core.minio_wrapper import MinioWrapper
 from gradio_demo.getting_started.core.mongo_client_wrapper import MongoClientWrapper
@@ -25,3 +26,11 @@ class AppContainer(containers.DeclarativeContainer):
         collection=config.mongo_db.collection,
     )
     flux = providers.Singleton(FluxWrapper)
+
+    app_controller = providers.Singleton(
+        AppController,
+        minio_storage=minio_storage,
+        flux=flux,
+        mongo_db=mongo_db,
+        config=config,
+    )

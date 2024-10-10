@@ -1,0 +1,19 @@
+gradio:
+  server_name: "0.0.0.0"
+  server_port: 7001
+  share: false
+  temp_dir: '/mnt/data/0.Workspace/0.SourceCode/project_zero/data/temp'
+
+minio_storage:
+  endpoint: "192.168.194.2:9000"
+  access_key: "jKYA67p9LclmAhr30cDO"
+  secret_key: "ovN1SNMTpIJxRKlps71JZBeypECoFP6LaFstXC3S"
+  bucket_name: "public"
+  secure: false
+
+mongo_db:
+  endpoint: "192.168.194.2:27017"
+  username: "admin"
+  password: "mongodb123"
+  database: "app"
+  collection: "requests"

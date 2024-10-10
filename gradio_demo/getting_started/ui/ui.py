@@ -3,20 +3,19 @@ from dependency_injector.providers import Configuration
 from dependency_injector.wiring import Provide, inject
 
 from gradio_demo.getting_started.containers.app_container import AppContainer
-from gradio_demo.getting_started.core.flux_wrapper import FluxWrapper
-from gradio_demo.getting_started.core.minio_wrapper import MinioWrapper
-from gradio_demo.getting_started.core.mongo_client_wrapper import MongoClientWrapper
+from gradio_demo.getting_started.core.controller import AppController
 from gradio_demo.getting_started.models.inputs import FluxInput
 
 
 @inject
 def make_app_ui(
-    minio_storage: MinioWrapper = Provide[AppContainer.minio_storage],
-    flux: FluxWrapper = Provide[AppContainer.flux],
-    mongo_db: MongoClientWrapper = Provide[AppContainer.mongo_db],
-    config: Configuration = Provide[AppContainer.config],
+    app_controller: AppController = Provide[AppContainer.app_controller],
 ):
     with gradio.Blocks() as demo:
+        with gradio.Row():
+            temp_user_id = app_controller.create_temp_user_id()
+            user_id = gradio.Textbox(label="User ID", value=temp_user_id, visible=True, interactive=False)
+
         with gradio.Row(show_progress=False):
             with gradio.Column(show_progress=False):
                 gradio.Markdown(
@@ -24,7 +23,7 @@ def make_app_ui(
                     # Inputs
                     """
                 )
-                input_prompt = gradio.Textbox(label="Input prompt", interactive=True)
+                input_prompt = gradio.Textbox(label="Input prompt", interactive=True, value="")
                 image_width = gradio.Slider(
                     label="Image width",
                     minimum=FluxInput.__MIN_SIZE__,
@@ -59,7 +58,6 @@ def make_app_ui(
                     value=FluxInput.__DEFAULT_GUIDANCE_SCALE__,
                     interactive=True,
                 )
-                n_items = gradio.Number(value=1, visible=False)
 
                 btn_generate_images = gradio.Button("Generate images")
 
@@ -72,23 +70,16 @@ def make_app_ui(
                 request_id = gradio.Textbox(label="Request ID")
                 output_url = gradio.Textbox(label="Output url", interactive=False, visible=True)
                 output_image = gradio.Image(type="filepath", format="png", show_download_button=True, interactive=False)
+
+            # Setup action listener
+            input_prompt.change(app_controller.update_input_prompt, [user_id, input_prompt], None)
+            image_width.change(app_controller.update_width, [user_id, image_width], None)
+            image_height.change(app_controller.update_height, [user_id, image_height], None)
+            num_inference_step.change(app_controller.update_num_inference_steps, [user_id, num_inference_step], None)
+            generator_seed.change(app_controller.update_generator_seed, [user_id, generator_seed], None)
+            guidance_scale.change(app_controller.update_guidance_scale, [user_id, guidance_scale], None)
+
             btn_generate_images.click(
-                flux.run,
-                [n_items, input_prompt, image_width, image_height, num_inference_step, guidance_scale, generator_seed],
-                [output_image],
-            )
-            output_image.change(minio_storage.upload, [output_image], [output_url])
-            output_url.change(
-                mongo_db.create,
-                inputs={
-                    input_prompt,
-                    image_width,
-                    image_height,
-                    num_inference_step,
-                    guidance_scale,
-                    generator_seed,
-                    output_url,
-                },
-                outputs=[request_id],
+                app_controller.run, [user_id], [output_image, output_url, request_id], concurrency_limit=1
             )
     return demo
