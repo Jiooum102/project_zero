@@ -1,6 +1,6 @@
 import gradio
-from dependency_injector.providers import Configuration
 from dependency_injector.wiring import Provide, inject
+from flask import session
 
 from gradio_demo.getting_started.containers.app_container import AppContainer
 from gradio_demo.getting_started.core.controller import AppController
@@ -13,10 +13,14 @@ def make_app_ui(
 ):
     with gradio.Blocks() as demo:
         with gradio.Row():
-            temp_user_id = app_controller.create_temp_user_id()
-            user_id = gradio.Textbox(label="User ID", value=temp_user_id, visible=True, interactive=False)
-
-        with gradio.Row(show_progress=False):
+            gradio.Markdown(
+                """
+                # Welcome to Gradio Demo
+                """
+            )
+            btn_start_demo = gradio.Button("Start Demo")
+            session_id = gradio.Textbox(label="Session ID", visible=False, interactive=False)
+        with gradio.Row(show_progress=False, visible=False) as main_row:
             with gradio.Column(show_progress=False):
                 gradio.Markdown(
                     """
@@ -71,15 +75,18 @@ def make_app_ui(
                 output_url = gradio.Textbox(label="Output url", interactive=False, visible=True)
                 output_image = gradio.Image(type="filepath", format="png", show_download_button=True, interactive=False)
 
-            # Setup action listener
-            input_prompt.change(app_controller.update_input_prompt, [user_id, input_prompt], None)
-            image_width.change(app_controller.update_width, [user_id, image_width], None)
-            image_height.change(app_controller.update_height, [user_id, image_height], None)
-            num_inference_step.change(app_controller.update_num_inference_steps, [user_id, num_inference_step], None)
-            generator_seed.change(app_controller.update_generator_seed, [user_id, generator_seed], None)
-            guidance_scale.change(app_controller.update_guidance_scale, [user_id, guidance_scale], None)
+        # Setup action listener
+        btn_start_demo.click(
+            app_controller.btn_start_demo_clicked, None, [session_id, main_row, btn_start_demo, session_id]
+        )
+        input_prompt.change(app_controller.update_input_prompt, [session_id, input_prompt])
+        image_width.change(app_controller.update_width, [session_id, image_width])
+        image_height.change(app_controller.update_height, [session_id, image_height])
+        num_inference_step.change(app_controller.update_num_inference_steps, [session_id, num_inference_step])
+        generator_seed.change(app_controller.update_generator_seed, [session_id, generator_seed])
+        guidance_scale.change(app_controller.update_guidance_scale, [session_id, guidance_scale])
 
-            btn_generate_images.click(
-                app_controller.run, [user_id], [output_image, output_url, request_id], concurrency_limit=1
-            )
+        btn_generate_images.click(
+            app_controller.run, [session_id], [output_image, output_url, request_id], concurrency_limit=1
+        )
     return demo

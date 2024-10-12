@@ -16,4 +16,5 @@ mongo_db:
   username: "admin"
   password: "mongodb123"
   database: "app"
-  collection: "requests"
+  requests_collection: "requests"
+  users_collection: "users"

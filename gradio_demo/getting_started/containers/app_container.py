@@ -9,7 +9,7 @@ from gradio_demo.getting_started.core.mongo_client_wrapper import MongoClientWra
 class AppContainer(containers.DeclarativeContainer):
     config = providers.Configuration()
 
-    minio_storage = providers.Singleton(
+    minio_storage = providers.Factory(
         MinioWrapper,
         endpoint=config.minio_storage.endpoint,
         access_key=config.minio_storage.access_key,
@@ -23,7 +23,8 @@ class AppContainer(containers.DeclarativeContainer):
         username=config.mongo_db.username,
         password=config.mongo_db.password,
         database=config.mongo_db.database,
-        collection=config.mongo_db.collection,
+        users_collection=config.mongo_db.users_collection,
+        requests_collection=config.mongo_db.requests_collection,
     )
     flux = providers.Singleton(FluxWrapper)
 

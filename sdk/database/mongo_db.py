@@ -19,6 +19,14 @@ class MongoDB:
             update={"$set": document},
         )
 
+    def find_one(self, database: str, collection: str, query: dict):
+        collection = self._client.get_database(database).get_collection(collection)
+        return collection.find_one(query)
+
+    def find(self, database: str, collection: str, query: dict):
+        collection = self._client.get_database(database).get_collection(collection)
+        return collection.find(query)
+
 
 if __name__ == '__main__':
     mongodb = MongoDB(username="admin", password="mongodb123", endpoint="localhost:27017")

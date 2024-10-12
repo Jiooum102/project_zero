@@ -2,6 +2,6 @@ from pydantic import BaseModel
 
 
 class FluxOutput(BaseModel):
-    output_url: str = ""
-    output_path: str = ""
-    output_record_id: str = ""
+    output_url: str = None
+    output_path: str = None
+    output_record_id: str = None
