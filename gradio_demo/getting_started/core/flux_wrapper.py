@@ -19,9 +19,6 @@ class FluxWrapper:
             img = self._flux.run(*args, **kwargs)
             output_images.append(img)
 
-        del self._flux
-        self._flux = None
-
         torch.cuda.empty_cache()
         gc.collect()
         return output_images[0]

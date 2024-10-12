@@ -1,18 +1,14 @@
-import copy
 import os
 import uuid
-from typing import Any, Dict, Union
+from typing import Dict, Union
 
-import cv2
 import gradio
-from dependency_injector.providers import Configuration
 
 from gradio_demo.getting_started.core.flux_wrapper import FluxWrapper
 from gradio_demo.getting_started.core.minio_wrapper import MinioWrapper
 from gradio_demo.getting_started.core.mongo_client_wrapper import MongoClientWrapper
 from gradio_demo.getting_started.models.inputs import FluxInput
 from gradio_demo.getting_started.models.outputs import FluxOutput
-from gradio_demo.getting_started.models.user import User
 
 
 class AppController:
