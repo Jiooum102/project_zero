@@ -1,5 +1,7 @@
 import datetime
 
+from bson import ObjectId
+
 from gradio_demo.getting_started.models.user import User
 from sdk.database.mongo_db import MongoDB
 
@@ -50,3 +52,7 @@ class MongoClientWrapper:
         return self._mongo_client.find(self._database, self._request_collection, query={}).sort('create_time', -1)[
             :limit
         ]
+
+    def find_request(self, request_id: str):
+        query = {"_id": ObjectId(request_id)}
+        return self._mongo_client.find_one(self._database, self._request_collection, query=query)

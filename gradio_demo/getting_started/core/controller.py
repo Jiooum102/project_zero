@@ -9,6 +9,7 @@ from gradio_demo.getting_started.core.minio_wrapper import MinioWrapper
 from gradio_demo.getting_started.core.mongo_client_wrapper import MongoClientWrapper
 from gradio_demo.getting_started.models.inputs import FluxInput
 from gradio_demo.getting_started.models.outputs import FluxOutput
+from sdk.utils.download import download_file
 
 
 class AppController:
@@ -65,6 +66,21 @@ class AppController:
         self.__session_infor[user_id]["input"].guidance_scale = guidance_scale
         return []
 
+    def update_output_url(self, user_id: str, output_url: str):
+        assert user_id in self.__session_infor, f"Not found session information of user id: {user_id}"
+        self.__session_infor[user_id]["output"].output_url = output_url
+        return []
+
+    def update_output_image(self, user_id: str, output_path: str):
+        assert user_id in self.__session_infor, f"Not found session information of user id: {user_id}"
+        self.__session_infor[user_id]["output"].output_path = output_path
+        return []
+
+    def update_request_id(self, user_id: str, request_id: str):
+        assert user_id in self.__session_infor, f"Not found session information of user id: {user_id}"
+        self.__session_infor[user_id]["output"].output_record_id = request_id
+        return []
+
     def btn_start_demo_clicked(self):
         session_id = self.create_new_session()
         return session_id, gradio.Row(visible=True), gradio.Button(visible=False), gradio.Textbox(visible=True)
@@ -95,6 +111,13 @@ class AppController:
                 ]
             )
         return gradio.Dataset(samples=_examples, visible=True)
+
+    def load_image_url(self, request_id: str) -> str:
+        _request_infor = self.__mongo_db.find_request(request_id=request_id)
+        _output = FluxOutput(**_request_infor['output'])
+        if not os.path.exists(_output.output_path):
+            download_file(url=_output.output_url, save_path=_output.output_path)
+        return _output.output_path
 
     def run(self, session_id: str):
         """

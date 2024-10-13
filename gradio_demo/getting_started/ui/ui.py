@@ -1,5 +1,8 @@
+from cProfile import label
+
 import gradio
 from dependency_injector.wiring import Provide, inject
+from streamlit.web.server import allow_cross_origin_requests
 
 from gradio_demo.getting_started.containers.app_container import AppContainer
 from gradio_demo.getting_started.core.controller import AppController
@@ -64,6 +67,7 @@ def make_app_ui(
                 with gradio.Row():
                     btn_generate_images = gradio.Button("Generate images")
                     btn_clear = gradio.ClearButton()
+                    btn_load_examples = gradio.Button("Load examples")
 
             with gradio.Column(show_progress=True):
                 gradio.Markdown(
@@ -76,7 +80,6 @@ def make_app_ui(
                 output_image = gradio.Image(type="filepath", format="png", show_download_button=True, interactive=False)
 
         with gradio.Column(show_progress=True):
-            btn_load_examples = gradio.Button("Load examples")
             examples = gradio.Examples(
                 examples=[
                     [
@@ -114,6 +117,11 @@ def make_app_ui(
         num_inference_step.change(app_controller.update_num_inference_steps, [session_id, num_inference_step])
         generator_seed.change(app_controller.update_generator_seed, [session_id, generator_seed])
         guidance_scale.change(app_controller.update_guidance_scale, [session_id, guidance_scale])
+        request_id.change(app_controller.update_request_id, [session_id, request_id])
+        output_url.change(app_controller.update_output_url, [session_id, output_url])
+        output_image.change(app_controller.update_output_image, [session_id, output_image])
+
+        examples.dataset.click(app_controller.load_image_url, [request_id], [output_image])
 
         btn_load_examples.click(app_controller.btn_load_examples_clicked, None, [examples.dataset])
         btn_clear.add(
