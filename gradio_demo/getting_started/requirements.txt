@@ -19,3 +19,14 @@ pydantic~=2.9.2
 wget~=3.2
 exceptiongroup~=1.2.2
 optimum~=1.22.0
+dependency-injector>=4.0,<5.0
+minio~=7.2.9
+gradio~=5.0.1
+
+pillow~=10.4.0
+torch~=2.4.1
+diffusers~=0.31.0.dev0
+transformers~=4.43.3
+pymongo~=4.10.1
+pydantic~=2.8.2
+email-validator~=2.2.0
