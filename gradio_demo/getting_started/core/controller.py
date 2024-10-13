@@ -85,8 +85,8 @@ class AppController:
         session_id = self.create_new_session()
         return session_id, gradio.Row(visible=True), gradio.Button(visible=False), gradio.Textbox(visible=True)
 
-    def btn_load_examples_clicked(self):
-        records = self.__mongo_db.get_latest_requests()
+    def get_examples(self, limit: int = 5):
+        records = self.__mongo_db.get_latest_requests(limit=limit)
         _examples = []
         for record in records:
             request_id = str(record["_id"])
@@ -110,6 +110,10 @@ class AppController:
                     _input.guidance_scale,
                 ]
             )
+        return _examples
+
+    def btn_load_examples_clicked(self):
+        _examples = self.get_examples(limit=50)
         return gradio.Dataset(samples=_examples, visible=True)
 
     def load_image_url(self, request_id: str) -> str:

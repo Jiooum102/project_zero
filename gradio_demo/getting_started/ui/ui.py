@@ -81,18 +81,7 @@ def make_app_ui(
 
         with gradio.Column(show_progress=True):
             examples = gradio.Examples(
-                examples=[
-                    [
-                        "",
-                        "",
-                        "",
-                        0,
-                        0,
-                        0,
-                        0,
-                        0,
-                    ]
-                ],
+                examples=[app_controller.get_examples(limit=5)],
                 inputs=[
                     request_id,
                     input_prompt,
@@ -121,7 +110,7 @@ def make_app_ui(
         output_url.change(app_controller.update_output_url, [session_id, output_url])
         output_image.change(app_controller.update_output_image, [session_id, output_image])
 
-        examples.dataset.click(app_controller.load_image_url, [request_id], [output_image])
+        examples.load_input_event.success(app_controller.load_image_url, [request_id], [output_image])
 
         btn_load_examples.click(app_controller.btn_load_examples_clicked, None, [examples.dataset])
         btn_clear.add(
