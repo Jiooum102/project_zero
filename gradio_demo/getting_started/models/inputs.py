@@ -37,7 +37,7 @@ class FluxInput(BaseModel):
     @field_validator('guidance_scale')
     def validate_guidance_scale(cls, v):
         assert (
-            cls.__MAX_GUIDANCE_SCALE__ <= v <= cls.__MIN_GUIDANCE_SCALE__
+            cls.__MIN_GUIDANCE_SCALE__ <= v <= cls.__MAX_GUIDANCE_SCALE__
         ), f'guidance_scale must be in range {cls.__MIN_GUIDANCE_SCALE__} to {cls.__MAX_GUIDANCE_SCALE__}'
 
     @field_validator('num_inference_steps')

@@ -1,6 +1,5 @@
 import gradio
 from dependency_injector.wiring import Provide, inject
-from flask import session
 
 from gradio_demo.getting_started.containers.app_container import AppContainer
 from gradio_demo.getting_started.core.controller import AppController
@@ -12,7 +11,7 @@ def make_app_ui(
     app_controller: AppController = Provide[AppContainer.app_controller],
 ):
     with gradio.Blocks() as demo:
-        with gradio.Row():
+        with gradio.Row(variant='panel'):
             gradio.Markdown(
                 """
                 # Welcome to Gradio Demo
@@ -62,8 +61,9 @@ def make_app_ui(
                     value=FluxInput.__DEFAULT_GUIDANCE_SCALE__,
                     interactive=True,
                 )
-
-                btn_generate_images = gradio.Button("Generate images")
+                with gradio.Row():
+                    btn_generate_images = gradio.Button("Generate images")
+                    btn_clear = gradio.ClearButton()
 
             with gradio.Column(show_progress=True):
                 gradio.Markdown(
@@ -74,6 +74,35 @@ def make_app_ui(
                 request_id = gradio.Textbox(label="Request ID")
                 output_url = gradio.Textbox(label="Output url", interactive=False, visible=True)
                 output_image = gradio.Image(type="filepath", format="png", show_download_button=True, interactive=False)
+
+        with gradio.Column(show_progress=True):
+            btn_load_examples = gradio.Button("Load examples")
+            examples = gradio.Examples(
+                examples=[
+                    [
+                        "",
+                        "",
+                        "",
+                        0,
+                        0,
+                        0,
+                        0,
+                        0,
+                    ]
+                ],
+                inputs=[
+                    request_id,
+                    input_prompt,
+                    output_url,
+                    image_width,
+                    image_height,
+                    num_inference_step,
+                    generator_seed,
+                    guidance_scale,
+                ],
+                cache_examples=False,
+                visible=False,
+            )
 
         # Setup action listener
         btn_start_demo.click(
@@ -86,7 +115,12 @@ def make_app_ui(
         generator_seed.change(app_controller.update_generator_seed, [session_id, generator_seed])
         guidance_scale.change(app_controller.update_guidance_scale, [session_id, guidance_scale])
 
+        btn_load_examples.click(app_controller.btn_load_examples_clicked, None, [examples.dataset])
+        btn_clear.add(
+            components=[input_prompt, image_width, image_height, num_inference_step, generator_seed, guidance_scale]
+        )
         btn_generate_images.click(
             app_controller.run, [session_id], [output_image, output_url, request_id], concurrency_limit=1
         )
+
     return demo

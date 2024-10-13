@@ -69,6 +69,33 @@ class AppController:
         session_id = self.create_new_session()
         return session_id, gradio.Row(visible=True), gradio.Button(visible=False), gradio.Textbox(visible=True)
 
+    def btn_load_examples_clicked(self):
+        records = self.__mongo_db.get_latest_requests()
+        _examples = []
+        for record in records:
+            request_id = str(record["_id"])
+            _input = FluxInput()
+            _input.prompt = record['input']['prompt']
+            _input.width = record['input']['width']
+            _input.height = record['input']['height']
+            _input.num_inference_steps = record['input']['num_inference_steps']
+            _input.generator_seed = record['input']['generator_seed']
+            _input.guidance_scale = record['input']['guidance_scale']
+            _output = FluxOutput(**record["output"])
+            _examples.append(
+                [
+                    request_id,
+                    _input.prompt,
+                    _output.output_url,
+                    _input.width,
+                    _input.height,
+                    _input.num_inference_steps,
+                    _input.generator_seed,
+                    _input.guidance_scale,
+                ]
+            )
+        return gradio.Dataset(samples=_examples, visible=True)
+
     def run(self, session_id: str):
         """
 

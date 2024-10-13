@@ -1,8 +1,4 @@
 import datetime
-import uuid
-
-from gradio_client.documentation import document
-from scipy.stats import logser
 
 from gradio_demo.getting_started.models.user import User
 from sdk.database.mongo_db import MongoDB
@@ -49,3 +45,8 @@ class MongoClientWrapper:
             )
             print(f"Inserted new user with document id: {insert_result.inserted_id}")
         return user.user_id
+
+    def get_latest_requests(self, limit: int = 50):
+        return self._mongo_client.find(self._database, self._request_collection, query={}).sort('create_time', -1)[
+            :limit
+        ]
