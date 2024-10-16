@@ -1,5 +1,5 @@
 version: '3.8'
-
+name: base_services
 networks:
   services-network:
     driver: bridge
@@ -20,3 +20,29 @@ services:
     volumes:
       - /mnt/storage/minio:/data
     command: server /data --console-address ":9001"
+
+  mongo:
+    image: mongo:latest
+    container_name: pz_mongo
+    ports:
+      - "27017:27017"
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: mongodb123
+      MONGO_INITDB_DATABASE: default
+      MONGODB_DATA_DIR: /data/db
+      MONDODB_LOG_DIR: /dev/null
+    networks:
+      - services-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
+
+    volumes:
+      - type: bind
+        source: /mnt/data/100.DockerVolumes/0.MongoData
+        target: /data/db
