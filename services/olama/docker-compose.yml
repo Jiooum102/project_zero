@@ -1,0 +1,53 @@
+version: '3.9'
+
+services:
+  ollama:
+    volumes:
+      - type: bind
+        source: "/mnt/data/100.DockerVolumes/1.Ollama"
+        target: "/root/.ollama"
+
+    container_name: ollama
+    pull_policy: always
+    tty: true
+    restart: unless-stopped
+    image: ollama/ollama:latest
+    ports:
+      - 7869:11434
+    environment:
+      - OLLAMA_KEEP_ALIVE=24h
+    networks:
+      - ollama-docker
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui
+    expose:
+      - 8080/tcp
+    ports:
+      - 8002:8080/tcp
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+      # uncomment the following if you are running ollama on the docker host and remove the ollama service below
+      #- OLLAMA_BASE_URL=http://host.docker.internal:11434
+    volumes:
+      - type: bind
+        source: "/mnt/data/100.DockerVolumes/open-webui"
+        target: "/app/backend/data"
+    depends_on:
+      - ollama
+    tty: true
+    restart: unless-stopped
+    networks:
+      - ollama-docker
+
+networks:
+  ollama-docker:
+    name: ollama-network
+    driver: bridge
