@@ -4,9 +4,8 @@ from typing import Dict, Union
 
 import gradio
 
+from gradio_demo.base.core import MinioWrapper, MongoClientWrapper
 from gradio_demo.getting_started.core.flux_wrapper import FluxWrapper
-from gradio_demo.getting_started.core.minio_wrapper import MinioWrapper
-from gradio_demo.getting_started.core.mongo_client_wrapper import MongoClientWrapper
 from gradio_demo.getting_started.models.inputs import FluxInput
 from gradio_demo.getting_started.models.outputs import FluxOutput
 from sdk.utils.download import download_file

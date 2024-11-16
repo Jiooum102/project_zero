@@ -1,8 +1,5 @@
-from cProfile import label
-
 import gradio
 from dependency_injector.wiring import Provide, inject
-from streamlit.web.server import allow_cross_origin_requests
 
 from gradio_demo.getting_started.containers.app_container import AppContainer
 from gradio_demo.getting_started.core.controller import AppController

@@ -5,7 +5,6 @@ from enum import Enum
 import numpy as np
 import safetensors.torch as sf
 import torch
-from briarmbg import BriaRMBG
 from diffusers import (
     AutoencoderKL,
     DDIMScheduler,
@@ -19,6 +18,8 @@ from diffusers.models.attention_processor import AttnProcessor2_0
 from PIL import Image
 from torch.hub import download_url_to_file
 from transformers import CLIPTextModel, CLIPTokenizer
+
+from sdk.models.briarmbg import BriaRMBG
 
 
 class BGSource(Enum):

@@ -2,12 +2,14 @@ from dependency_injector import containers, providers
 
 from gradio_demo.base.core.minio_wrapper import MinioWrapper
 from gradio_demo.base.core.mongo_client_wrapper import MongoClientWrapper
-from gradio_demo.getting_started.core.controller import AppController
-from gradio_demo.getting_started.core.flux_wrapper import FluxWrapper
+from gradio_demo.face_relight.core.app_controller import AppController
+from gradio_demo.face_relight.core.ic_light_wrapper import ICLightWrapper
 
 
 class AppContainer(containers.DeclarativeContainer):
     config = providers.Configuration()
+
+    ic_light = providers.Singleton(ICLightWrapper, device_id=config.ic_light.device_id)
 
     minio_storage = providers.Factory(
         MinioWrapper,
@@ -26,12 +28,11 @@ class AppContainer(containers.DeclarativeContainer):
         users_collection=config.mongo_db.users_collection,
         requests_collection=config.mongo_db.requests_collection,
     )
-    flux = providers.Singleton(FluxWrapper)
 
     app_controller = providers.Singleton(
         AppController,
         minio_storage=minio_storage,
-        flux=flux,
         mongo_db=mongo_db,
         config=config,
+        ic_light=ic_light,
     )
