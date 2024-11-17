@@ -21,9 +21,9 @@ class MongoClientWrapper:
         self._users_collection = users_collection
         self._request_collection = requests_collection
 
-    def insert_request(self, data, *args, **kwargs):
-        doc = {k.label: v for k, v in data.items()}
-        return self.insert_one_request(doc, *args, **kwargs)
+    # def insert_request(self, data, *args, **kwargs):
+    #     doc = {k.label: v for k, v in data.items()}
+    #     return self.insert_one_request(doc, *args, **kwargs)
 
     def insert_one_request(self, data: dict, *args, **kwargs):
         create_time = datetime.datetime.now()

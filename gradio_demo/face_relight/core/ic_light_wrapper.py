@@ -1,5 +1,4 @@
 import cv2
-import numpy as np
 
 from sdk.models.ic_light import ICLight
 

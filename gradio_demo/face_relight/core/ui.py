@@ -106,8 +106,8 @@ def make_app_ui(
         )
 
         # Setup action listener
-        input_fg.change(fn=app_controller.upload_file, inputs=[input_fg], outputs=[input_fg_url])
-        output_bg.change(fn=app_controller.upload_file, inputs=[output_bg], outputs=[output_bg_url])
+        input_fg.change(fn=app_controller.save_image_to_minio, inputs=[input_fg], outputs=[input_fg_url])
+        output_bg.change(fn=app_controller.save_image_to_minio, inputs=[output_bg], outputs=[output_bg_url])
 
         ips = [
             input_fg,

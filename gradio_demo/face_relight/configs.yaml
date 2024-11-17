@@ -1,3 +1,5 @@
+temp_dir: "data/ic_light/temp"
+
 ic_light:
   device_id: 0
 
