@@ -41,7 +41,7 @@ services:
     networks:
       - prometheus-network
   nvidia-dcgm-exporter:
-    image: nvcr.io/nvidia/k8s/dcgm-exporter:3.3.7-3.5.0-ubuntu22.04
+    image: nvcr.io/nvidia/k8s/dcgm-exporter:3.3.9-3.6.1-ubuntu22.04
     container_name: pz_nvidia-dcgm-exporter
     pid: host
     deploy:
