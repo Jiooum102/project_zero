@@ -1,0 +1,18 @@
+version: '3.5'
+
+services:
+  tabby:
+    restart: always
+    image: registry.tabbyml.com/tabbyml/tabby
+    command: serve --model DeepSeek-Coder-V2-Lite --chat-model Qwen2-1.5B-Instruct --device cuda
+    volumes:
+      - "$HOME/.tabby:/data"
+    ports:
+      - 8081:8080
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
