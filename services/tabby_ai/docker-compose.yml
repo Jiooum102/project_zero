@@ -4,6 +4,7 @@ services:
   tabby:
     restart: always
     image: registry.tabbyml.com/tabbyml/tabby
+    pull_policy: always
     command: serve --model DeepSeek-Coder-V2-Lite --chat-model Qwen2-1.5B-Instruct --device cuda
     volumes:
       - "$HOME/.tabby:/data"
