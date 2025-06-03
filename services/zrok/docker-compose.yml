@@ -1,0 +1,10 @@
+services:
+  zrok:
+    image: openziti/zrok
+    restart: unless-stopped
+    user: "${UID}"
+    volumes:
+      - ${HOME}/.zrok:/home/ziggy/.zrok
+    environment:
+      PFXLOG_NO_JSON: "true"
+    command: share reserved "jiooum" --headless
