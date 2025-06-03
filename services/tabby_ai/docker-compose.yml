@@ -7,7 +7,7 @@ services:
     pull_policy: always
     command: serve --model Qwen2.5-Coder-3B --chat-model Qwen2-1.5B-Instruct --device cuda
     volumes:
-      - "$HOME/.tabby:/data"
+      - "${BASE_DATA_DIR}/100.DockerVolumes/tabby:/data"
     ports:
       - 8081:8080
     deploy:

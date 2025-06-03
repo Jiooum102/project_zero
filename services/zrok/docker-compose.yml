@@ -4,7 +4,7 @@ services:
     restart: unless-stopped
     user: "${UID}"
     volumes:
-      - ${HOME}/.zrok:/home/ziggy/.zrok
+      - ${BASE_DATA_DIR}/100.DockerVolumes/zrok:/home/ziggy/.zrok
     environment:
       PFXLOG_NO_JSON: "true"
     command: share reserved "jiooum" --headless

@@ -5,7 +5,7 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: /home/binhds/Workspace/
+      device: ${BASE_DATA_DIR}
       o: bind
 
 services:
@@ -24,7 +24,7 @@ services:
       - DEFAULT_WORKSPACE=/config/workspace #optional
     volumes:
       - workspace:/home/Workspace
-      - ${pwd}/config:/config
+      - ${BASE_DATA_DIR}/100.DockerVolumes/code-server/config:/config
     ports:
       - 8443:8443
     restart: unless-stopped

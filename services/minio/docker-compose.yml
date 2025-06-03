@@ -18,7 +18,7 @@ services:
       MINIO_ROOT_USER: root
       MINIO_ROOT_PASSWORD: 123qwe!@#
     volumes:
-      - /mnt/storage/minio:/data
+      - ${BASE_DATA_DIR}/100.DockerVolumes/minio:/data
     command: server /data --console-address ":9001"
 
   mongo:
@@ -44,5 +44,5 @@ services:
 
     volumes:
       - type: bind
-        source: /mnt/data/100.DockerVolumes/0.MongoData
+        source: ${BASE_DATA_DIR}/100.DockerVolumes/0.MongoData
         target: /data/db
