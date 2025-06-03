@@ -4,7 +4,7 @@ services:
   ollama:
     volumes:
       - type: bind
-        source: "/mnt/data/100.DockerVolumes/1.Ollama"
+        source: "${BASE_DATA_DIR}/100.DockerVolumes/1.Ollama"
         target: "/root/.ollama"
 
     container_name: ollama
@@ -38,7 +38,7 @@ services:
       #- OLLAMA_BASE_URL=http://host.docker.internal:11434
     volumes:
       - type: bind
-        source: "/mnt/data/100.DockerVolumes/open-webui"
+        source: "${BASE_DATA_DIR}/100.DockerVolumes/open-webui"
         target: "/app/backend/data"
     depends_on:
       - ollama
