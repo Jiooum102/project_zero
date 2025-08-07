@@ -15,14 +15,14 @@ scrape_configs:
       - targets: ['pz_prometheus:9090']
   - job_name: 'node_exporter'
     static_configs:
-      - targets: ['192.168.194.2:9100', '192.168.194.37:9100']
+      - targets: ['192.168.196.202:2', '192.168.196.202:9100']
   - job_name: 'nvidia-dcgm-exporter'
     static_configs:
-      - targets: ['192.168.194.2:9400', '192.168.194.37:9400']
+      - targets: ['192.168.196.2:9400', '192.168.196.202:9400']
 
   - job_name: cadvisor
     scrape_interval: 5s
     static_configs:
       - targets:
-          - 192.168.194.2:8080
-          - 192.168.194.37:8080
+          - 192.168.196.2:8080
+          - 192.168.196.202:8080
